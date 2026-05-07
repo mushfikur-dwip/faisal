@@ -7,15 +7,56 @@ import {
 
 export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const galleryItems = [
+    {
+      title: 'জনসেবামূলক সভা',
+      category: 'নেতৃত্ব',
+      image:
+        'https://images.unsplash.com/photo-1468779065891-103dac4a7c48?auto=format&fit=crop&w=900&q=80',
+    },
+    {
+      title: 'শিক্ষা উন্নয়ন কার্যক্রম',
+      category: 'সমাজসেবা',
+      image:
+        'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
+    },
+    {
+      title: 'যুব সংগঠনের সাথে',
+      category: 'যুব উন্নয়ন',
+      image:
+        'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
+    },
+    {
+      title: 'গ্রামীণ উন্নয়ন ভিজিট',
+      category: 'উন্নয়ন',
+      image:
+        'https://images.unsplash.com/photo-1444491741275-3747c53c99b4?auto=format&fit=crop&w=900&q=80',
+    },
+    {
+      title: 'শীতবস্ত্র বিতরণ',
+      category: 'মানবিক সহায়তা',
+      image:
+        'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80',
+    },
+    {
+      title: 'নির্বাচনী প্রচারণা',
+      category: 'রাজনীতি',
+      image:
+        'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=900&q=80',
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 scroll-smooth selection:bg-blue-200">
       {/* Navbar - Dark Blue */}
-      <nav className="fixed w-full bg-[#1a2639] border-b border-[#2a3649] z-50 transition-all">
+      <nav className="fixed w-full bg-gradient-to-b from-[#1a2639] to-[#0f1620] border-b border-white/10 z-50 transition-all backdrop-blur-xl bg-opacity-95 shadow-lg shadow-black/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold text-white tracking-tight font-bengali italic">ফয়সাল হোসেন</span>
+              {/* <div className="w-10 h-10 bg-gradient-to-br from-[#d92c2c] to-[#ff4444] rounded-lg flex items-center justify-center shadow-lg shadow-red-500/30">
+                <span className="text-white font-bold text-lg">ফ</span>
+              </div> */}
+              <span className="text-2xl font-bold text-white tracking-tight font-bengali italic hover:text-blue-300 transition-colors">ফয়সাল হোসেন</span>
             </div>
             
             {/* Desktop Menu */}
@@ -24,6 +65,7 @@ export default function App() {
               <a href="#experience" className="hover:text-white transition-colors">অভিজ্ঞতা</a>
               <a href="#politics" className="hover:text-white transition-colors">রাজনীতি</a>
               <a href="#social" className="hover:text-white transition-colors">সামাজিক কাজ</a>
+              <a href="#gallery" className="hover:text-white transition-colors">গ্যালারি</a>
               <a href="#vision" className="hover:text-white transition-colors">লক্ষ্য</a>
             </div>
 
@@ -50,13 +92,14 @@ export default function App() {
             <a href="#experience" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>অভিজ্ঞতা</a>
             <a href="#politics" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>রাজনীতি</a>
             <a href="#social" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>সামাজিক কাজ</a>
+            <a href="#gallery" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>গ্যালারি</a>
             <a href="#vision" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>লক্ষ্য</a>
           </motion.div>
         )}
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative pt-20 pb-16 lg:pt-32 lg:pb-24 overflow-hidden bg-white">
+      <section id="home" className="relative pt-20 pb-16 lg:pt-32 lg:pb-24 overflow-hidden bg-gradient-to-br from-white via-slate-50 to-blue-50">
         {/* Background Sketch / Architecture element */}
         <div className="absolute inset-0 z-0 opacity-5 pointer-events-none" 
              style={{ 
@@ -93,9 +136,10 @@ export default function App() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="lg:col-span-5 relative h-[450px] lg:h-[600px] flex justify-center items-end mt-12 lg:mt-0"
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="lg:col-span-5 relative h-[450px] lg:h-[600px] flex justify-center items-end  lg:mt-0"
             >
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-500/10 to-transparent rounded-2xl blur-2xl"></div>
               <div className="relative z-10 w-full max-w-md h-[400px] lg:h-[550px] flex items-end justify-center">
                 {/* 
                   Note: Since I cannot directly save the image from the chat, 
@@ -119,13 +163,13 @@ export default function App() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-slate-100">
+      <section id="about" className="py-20 bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <h2 className="text-3xl font-serif font-bold text-[#1a4a8d] mb-8">ব্যক্তিগত পরিচিতি</h2>
+            <h2 className="text-3xl font-serif font-bold bg-gradient-to-r from-[#1a4a8d] to-blue-700 bg-clip-text text-transparent mb-8">ব্যক্তিগত পরিচিতি</h2>
             
             <div className="grid md:grid-cols-2 gap-8 text-lg text-slate-700">
-              <div className="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <div className="space-y-4 bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:shadow-blue-500/10 border border-slate-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-105">
                 <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">নাম</strong> ইঞ্জিনিয়ার মোহাম্মদ ফয়সাল হোসেন</p>
                 <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">পিতা ও মাতা</strong> মোঃ আব্দুর রউফ মন্ডল, ফইনুর নেসা</p>
                 <div className="pt-2">
@@ -134,7 +178,7 @@ export default function App() {
                 </div>
               </div>
               
-              <div className="space-y-4 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <div className="space-y-4 bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:shadow-red-500/10 border border-slate-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
                 <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">স্ত্রী</strong> এরুফা জামিন আইভি (শিক্ষক)</p>
                 <p className="text-sm text-slate-500">বিএসসি অনার্স, বিএড, এমএসসি (Applied Chemistry, Rajshahi University)</p>
                 <p className="pt-2"><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">সন্তান</strong> ফাবলিহা বুশরা (১৪) ও ইরফান সাদিক (৭)</p>
@@ -145,14 +189,16 @@ export default function App() {
       </section>
 
       {/* Education & Experience */}
-      <section id="experience" className="py-24 bg-white">
+      <section id="experience" className="py-24 bg-gradient-to-br from-white via-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Education Timeline */}
             <div>
               <div className="flex items-center gap-3 mb-8">
-                <GraduationCap className="w-8 h-8 text-[#d92c2c]" />
-                <h2 className="text-3xl font-serif font-bold text-slate-900">একাডেমিক যোগ্যতা</h2>
+                <div className="w-10 h-10 bg-gradient-to-br from-[#d92c2c] to-red-600 rounded-lg flex items-center justify-center">
+                  <GraduationCap className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-3xl font-serif font-bold bg-gradient-to-r from-[#1a4a8d] to-blue-700 bg-clip-text text-transparent">একাডেমিক যোগ্যতা</h2>
               </div>
               
               <div className="space-y-6 relative border-l-2 border-slate-200 ml-4 pl-8">
@@ -176,8 +222,10 @@ export default function App() {
             {/* Experience */}
             <div>
               <div className="flex items-center gap-3 mb-8">
-                <Briefcase className="w-8 h-8 text-[#d92c2c]" />
-                <h2 className="text-3xl font-serif font-bold text-slate-900">পেশাগত জীবন</h2>
+                <div className="w-10 h-10 bg-gradient-to-br from-[#1a4a8d] to-blue-700 rounded-lg flex items-center justify-center">
+                  <Briefcase className="w-6 h-6 text-white" />
+                </div>
+                <h2 className="text-3xl font-serif font-bold bg-gradient-to-r from-[#d92c2c] to-red-600 bg-clip-text text-transparent">পেশাগত জীবন</h2>
               </div>
               
               <div className="space-y-6 relative border-l-2 border-slate-200 ml-4 pl-8">
@@ -201,41 +249,56 @@ export default function App() {
       </section>
 
       {/* Political Journey */}
-      <section id="politics" className="py-24 bg-[#1a2639] text-white">
+      <section id="politics" className="py-24 bg-gradient-to-br from-[#0f1620] via-[#1a2639] to-[#0f1620] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl font-serif font-bold mb-4">রাজনৈতিক ও সাংগঠনিক ভূমিকা</h2>
-            <div className="w-16 h-1 bg-[#d92c2c] mx-auto mb-6"></div>
+            <h2 className="text-4xl font-serif font-bold bg-gradient-to-r from-blue-300 to-red-300 bg-clip-text text-transparent mb-4">রাজনৈতিক ও সাংগঠনিক ভূমিকা</h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-[#64b5f6] to-[#d92c2c] mx-auto mb-6 rounded-full"></div>
             <p className="text-slate-300 text-lg">ছাত্রজীবন থেকে শুরু করে জাতীয় পর্যায় পর্যন্ত বলিষ্ঠ রাজনৈতিক নেতৃত্ব ও সাংগঠনিক দক্ষতা।</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-[#2a3649] p-8 rounded-2xl border border-white/5">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">ছাত্র রাজনীতি</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
                 বিশ্ববিদ্যালয় জীবনে ছাত্রদলের রাজনীতির সাথে সম্পৃক্ত। ঢাকাস্থ নওগাঁ জেলার ছাত্রদের নিয়ে ছাত্র কল্যাণ সমিতি গঠন এবং বুটেক্সিয়ান ছাত্র সংগঠনকে একত্রিত করায় অপরিসীম ভূমিকা। মহাদেবপুর উপজেলা আঞ্চলিক ছাত্র কল্যাণ সমিতির প্রতিষ্ঠাতা সভাপতি।
               </p>
-            </div>
+            </motion.div>
             
-            <div className="bg-[#2a3649] p-8 rounded-2xl border border-white/5">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-red-400/50 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">জাতীয় নির্বাচন ভূমিকা</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
                 ২০০৮ ও ২০২৬ সালের জাতীয় সংসদে সরাসরি নির্বাচনী প্রচারণা। ২০২৬ সালে নওগাঁ-৩ আসনে ফজলে হুদা বাবুল এর সাথে যুক্ত থেকে ওয়ার্ড ও ইউনিয়ন পর্যায়ে শক্তিশালী নির্বাচনী কাঠামো গড়ে বিজয়ী করতে অসামান্য ভূমিকা।
               </p>
-            </div>
+            </motion.div>
             
-            <div className="bg-[#2a3649] p-8 rounded-2xl border border-white/5">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-purple-400/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">পেশাজীবী রাজনীতি</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
                 নওগাঁ জেলা খালেদা জিয়া তারেক রহমান মুক্তি পরিষদ-এর সহ-সভাপতি (২০১১)। জাতীয়তাবাদী টেক্সটাইল ইঞ্জিনিয়ার ফোরামের যুগ্ন সাধারণ সম্পাদক। এ্যাব (AAB) এরাজীপুর জেলা নির্বাচনী কমিটির যুগ্ন আহ্বায়ক এবং নওগাঁ জেলা কমিটির সদস্য (২০২৬)।
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Social Contributions & Vision */}
-      <section id="social" className="py-24 bg-slate-50">
+      <section id="social" className="py-24 bg-gradient-to-br from-blue-50 via-white to-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16">
             <div>
@@ -308,15 +371,62 @@ export default function App() {
         </div>
       </section>
 
+      {/* Gallery Section */}
+      <section id="gallery" className="py-24 bg-gradient-to-br from-slate-100 via-white to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <h2 className="text-4xl font-serif font-bold bg-gradient-to-r from-[#1a4a8d] to-[#d92c2c] bg-clip-text text-transparent mb-4">
+              ছবি গ্যালারি
+            </h2>
+            <p className="text-slate-600 text-lg">
+              সামাজিক কার্যক্রম, নেতৃত্ব এবং উন্নয়ন অভিযাত্রার কিছু গুরুত্বপূর্ণ মুহূর্ত।
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {galleryItems.map((item, index) => (
+              <motion.article
+                key={item.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: index * 0.06 }}
+                viewport={{ once: true, amount: 0.3 }}
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md"
+              >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/45 to-transparent p-4">
+                  <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                    {item.category}
+                  </span>
+                  <h3 className="mt-2 text-lg font-semibold text-white">{item.title}</h3>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-[#111] py-12 text-slate-400">
+      <footer className="bg-gradient-to-r from-[#0f1620] via-[#111] to-[#0f1620] py-12 text-slate-400 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-2xl font-bold text-white tracking-tight font-bengali italic">ফয়সাল হোসেন</div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-[#d92c2c] to-red-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">ফ</span>
+              </div>
+              <span className="text-2xl font-bold text-white tracking-tight font-bengali italic">ফয়সাল হোসেন</span>
+            </div>
             <div className="flex space-x-6">
-              <a href="#" className="hover:text-white transition-colors"><Facebook className="w-5 h-5" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Twitter className="w-5 h-5" /></a>
-              <a href="#" className="hover:text-white transition-colors"><Linkedin className="w-5 h-5" /></a>
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-500/30 transition-all duration-300 transform hover:scale-110"><Facebook className="w-5 h-5" /></a>
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-400/30 transition-all duration-300 transform hover:scale-110"><Twitter className="w-5 h-5" /></a>
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600/30 transition-all duration-300 transform hover:scale-110"><Linkedin className="w-5 h-5" /></a>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-slate-800 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
