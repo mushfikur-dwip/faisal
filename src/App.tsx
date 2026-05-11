@@ -308,7 +308,7 @@ export default function App() {
               className="bg-gradient-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-purple-400/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">পেশাজীবী রাজনীতি</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                নওগাঁ জেলা খালেদা জিয়া তারেক রহমান মুক্তি পরিষদ-এর সহ-সভাপতি (২০১১)। জাতীয়তাবাদী টেক্সটাইল ইঞ্জিনিয়ার ফোরামের যুগ্ন সাধারণ সম্পাদক। এ্যাব (AAB) এরাজীপুর জেলা নির্বাচনী কমিটির যুগ্ন আহ্বায়ক এবং নওগাঁ জেলা কমিটির সদস্য (২০২৬)।
+                নওগাঁ জেলা খালেদা জিয়া তারেক রহমান মুক্তি পরিষদ-এর সহ-সভাপতি (২০১১)। জাতীয়তাবাদী টেক্সটাইল ইঞ্জিনিয়ার ফোরামের যুগ্ন সাধারণ সম্পাদক। এ্যাব (AEB) এরাজীপুর জেলা নির্বাচনী কমিটির যুগ্ন আহ্বায়ক এবং নওগাঁ জেলা কমিটির সদস্য (২০২৬)।
               </p>
             </motion.div>
           </div>
