@@ -2,12 +2,22 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   Menu, X, Phone, Mail, MapPin, 
-  GraduationCap, Briefcase, Target, HeartHandshake, Facebook, Twitter, Linkedin
+  GraduationCap, Briefcase, Target, HeartHandshake, Facebook, Twitter, Linkedin, Settings
 } from 'lucide-react';
+import AdminDashboard from './AdminDashboard';
+
+interface GalleryItem {
+  id?: string;
+  title: string;
+  category: string;
+  image: string;
+  uploadedAt?: string;
+}
 
 export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const galleryItems = [
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([
     {
       title: 'জনসেবামূলক সভা',
       category: 'নেতৃত্ব',
@@ -44,10 +54,16 @@ export default function App() {
       image:
         'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=900&q=80',
     },
-  ];
+  ]);
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 scroll-smooth selection:bg-blue-200">
+      <AdminDashboard 
+        isOpen={isAdminOpen}
+        onClose={() => setIsAdminOpen(false)}
+        onGalleryUpdate={setGalleryItems}
+        currentGallery={galleryItems}
+      />
       {/* Navbar - Dark Blue */}
       <nav className="fixed w-full bg-gradient-to-b from-[#1a2639] to-[#0f1620] border-b border-white/10 z-50 transition-all backdrop-blur-xl bg-opacity-95 shadow-lg shadow-black/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -513,10 +529,19 @@ export default function App() {
               </div>
               <span className="text-2xl font-bold text-white tracking-tight font-bengali italic">ফয়সাল হোসেন</span>
             </div>
-            <div className="flex space-x-6">
+            <div className="flex space-x-6 items-center">
               <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-500/30 transition-all duration-300 transform hover:scale-110"><Facebook className="w-5 h-5" /></a>
               <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-400/30 transition-all duration-300 transform hover:scale-110"><Twitter className="w-5 h-5" /></a>
               <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600/30 transition-all duration-300 transform hover:scale-110"><Linkedin className="w-5 h-5" /></a>
+              
+              {/* Admin Button */}
+              <button
+                onClick={() => setIsAdminOpen(true)}
+                className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-110 ml-2"
+                title="অ্যাডমিন প্যানেল"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-slate-800 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
