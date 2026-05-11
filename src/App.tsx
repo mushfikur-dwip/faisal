@@ -197,7 +197,7 @@ export default function App() {
               </div>
               
               <div className="space-y-4 bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:shadow-red-500/10 border border-slate-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
-                <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">স্ত্রী</strong> এরুফা জামিন আইভি (শিক্ষক)</p>
+                <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">স্ত্রী</strong> ইরুফা জেমিন আইভি (শিক্ষক)</p>
                 <p className="text-sm text-slate-500">বিএসসি অনার্স, বিএড, এমএসসি (Applied Chemistry, Rajshahi University)</p>
                 <p className="pt-2"><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">সন্তান</strong> ফাবলিহা বুশরা (১৪) ও ইরফান সাদিক (৭)</p>
               </div>
