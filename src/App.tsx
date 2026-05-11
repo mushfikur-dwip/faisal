@@ -429,7 +429,7 @@ export default function App() {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-slate-900">প্রতিষ্ঠাতা ও পরিচালক</h3>
-                  <p className="text-[#d92c2c] font-semibold mt-1">প্রকৃতি ও পরিবেশ বন্ধু সংগঠন</p>
+                  <p className="text-[#d92c2c] font-semibold mt-1">প্রকৃতি ও পরিবেশ বন্ধু পরিষদ</p>
                 </div>
               </div>
               <p className="text-slate-600 leading-relaxed">মহাদেবপুর, নওগাঁ অঞ্চলে পরিবেশ সচেতনতা ও সংরক্ষণ কাজে অগ্রগামী ভূমিকা।</p>
