@@ -20,12 +20,12 @@ interface AdminDashboardProps {
 export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, currentGallery }: AdminDashboardProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState<{ [key: string]: boolean }>({});
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'faisal_gallery';
   const correctPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
   const handleLogin = (e: React.FormEvent) => {
@@ -46,6 +46,16 @@ export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, curre
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (!cloudName) {
+      setError('Cloudinary cloud name সেট করা নেই। .env এ VITE_CLOUDINARY_CLOUD_NAME দিন।');
+      return;
+    }
+
+    if (!uploadPreset) {
+      setError('Cloudinary upload preset সেট করা নেই। .env এ VITE_CLOUDINARY_UPLOAD_PRESET দিন।');
+      return;
+    }
+
     setUploadingFiles(prev => ({ ...prev, [itemIndex]: true }));
     setError('');
     setSuccess('');
@@ -53,7 +63,7 @@ export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, curre
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'faisal_gallery'); // You need to create this in Cloudinary
+      formData.append('upload_preset', uploadPreset);
       formData.append('folder', 'faisal-gallery');
 
       const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
@@ -61,13 +71,18 @@ export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, curre
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Upload failed');
+      const responseText = await response.text();
+      const responseData = responseText ? JSON.parse(responseText) : {};
 
-      const data = await response.json();
+      if (!response.ok) {
+        const cloudinaryMessage = responseData?.error?.message || 'Upload failed';
+        throw new Error(cloudinaryMessage);
+      }
+
       const updatedGallery = [...currentGallery];
       updatedGallery[itemIndex] = {
         ...updatedGallery[itemIndex],
-        image: data.secure_url,
+        image: responseData.secure_url,
         uploadedAt: new Date().toISOString(),
       };
 
@@ -75,10 +90,12 @@ export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, curre
       setSuccess('ছবি আপডেট সফল!');
       setTimeout(() => setSuccess(''), 2000);
     } catch (err) {
-      setError('ছবি আপলোড ব্যর্থ। আবার চেষ্টা করুন।');
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setError(`ছবি আপলোড ব্যর্থ: ${message}`);
       console.error(err);
     } finally {
       setUploadingFiles(prev => ({ ...prev, [itemIndex]: false }));
+      e.target.value = '';
     }
   };
 
@@ -114,7 +131,7 @@ export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, curre
         className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
       >
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-[#1a4a8d] to-[#d92c2c] p-6 text-white flex justify-between items-center z-10">
+        <div className="sticky top-0 bg-linear-to-r from-[#1a4a8d] to-[#d92c2c] p-6 text-white flex justify-between items-center z-10">
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Lock className="w-6 h-6" />
             গ্যালারি ম্যানেজমেন্ট
@@ -175,11 +192,10 @@ export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, curre
                 </motion.div>
               )}
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-[#1a4a8d] to-blue-700 text-white font-bold py-3 rounded-lg hover:shadow-lg transition disabled:opacity-50"
-              >
+                <button
+                  type="submit"
+                  className="w-full bg-linear-to-r from-[#1a4a8d] to-blue-700 text-white font-bold py-3 rounded-lg hover:shadow-lg transition"
+                >
                 লগইন করুন
               </button>
             </motion.form>
@@ -298,7 +314,7 @@ export default function AdminDashboard({ isOpen, onClose, onGalleryUpdate, curre
 
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 text-sm text-blue-900">
                 <strong>নোট:</strong> Cloudinary এ অবশ্যই একটি upload preset তৈরি করুন।
-                Dashboard এ যান এবং Settings → Upload → Add upload preset → নাম দিন "faisal_gallery"
+                Dashboard এ যান এবং Settings → Upload → Add upload preset → নাম দিন "{uploadPreset}"।
               </div>
             </motion.div>
           )}
