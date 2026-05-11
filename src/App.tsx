@@ -65,6 +65,7 @@ export default function App() {
               <a href="#experience" className="hover:text-white transition-colors">অভিজ্ঞতা</a>
               <a href="#politics" className="hover:text-white transition-colors">রাজনীতি</a>
               <a href="#social" className="hover:text-white transition-colors">সামাজিক কাজ</a>
+              <a href="#organizational" className="hover:text-white transition-colors">সংগঠন</a>
               <a href="#gallery" className="hover:text-white transition-colors">গ্যালারি</a>
               <a href="#vision" className="hover:text-white transition-colors">লক্ষ্য</a>
             </div>
@@ -92,6 +93,7 @@ export default function App() {
             <a href="#experience" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>অভিজ্ঞতা</a>
             <a href="#politics" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>রাজনীতি</a>
             <a href="#social" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>সামাজিক কাজ</a>
+            <a href="#organizational" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>সংগঠন</a>
             <a href="#gallery" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>গ্যালারি</a>
             <a href="#vision" className="block px-3 py-2 text-slate-300 hover:text-white rounded-md" onClick={() => setIsMobileMenuOpen(false)}>লক্ষ্য</a>
           </motion.div>
@@ -118,7 +120,7 @@ export default function App() {
               className="lg:col-span-7 space-y-6 pt-12 lg:pt-0"
             >
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-slate-900 leading-tight">
-                <span className="text-[#1a4a8d]">ইঞ্জিনিয়ার</span> <span className="text-[#d92c2c] block mt-1">মোহাম্মদ ফয়সাল হোসেন</span>
+                <span className="text-[#1a4a8d]">ইঞ্জিনিয়ার</span> <span className="text-[#d92c2c] block mt-1">মোঃ ফয়সাল হোসেন</span>
               </h1>
               
               <div className="w-16 h-1 bg-[#d92c2c] mt-6 mb-8"></div>
@@ -170,8 +172,8 @@ export default function App() {
             
             <div className="grid md:grid-cols-2 gap-8 text-lg text-slate-700">
               <div className="space-y-4 bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:shadow-blue-500/10 border border-slate-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-105">
-                <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">নাম</strong> ইঞ্জিনিয়ার মোহাম্মদ ফয়সাল হোসেন</p>
-                <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">পিতা ও মাতা</strong> মোঃ আব্দুর রউফ মন্ডল, ফইনুর নেসা</p>
+                <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">নাম</strong> ইঞ্জিনিয়ার মোঃ ফয়সাল হোসেন</p>
+                <p><strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">পিতা ও মাতা</strong> মোঃ আব্দুর রউফ মন্ডল, ফয়নুর নেসা</p>
                 <div className="pt-2">
                   <strong className="text-slate-900 block text-sm uppercase tracking-wide mb-1">ঠিকানা</strong>
                   <p className="flex items-start text-sm"><MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0 text-[#d92c2c]" /> গ্রাম: আলী দেওনা, ডাকঘর: বেলকুড়ি, উপজেলা: মহাদেবপুর, জেলা: নওগাঁ। (বর্তমান: ঢাকা)</p>
@@ -205,8 +207,8 @@ export default function App() {
                 {[
                   { deg: "MBA", inst: "Bangladesh University of Professionals (BUP)", year: "Post Graduation" },
                   { deg: "B.Sc in Textile Engineering", inst: "Bangladesh Textile University (BUTEX), Dhaka", year: "Graduation" },
-                  { deg: "HSC (Science)", inst: "Rajshahi New Govt. Degree College", year: "2002 - 1st Division" },
-                  { deg: "SSC (Science)", inst: "Rajshahi Collegiate School", year: "2000 - 1st Division" },
+                  { deg: "HSC (Science)", inst: "Rajshahi New Govt. Degree College", year: "2002" },
+                  { deg: "SSC (Science)", inst: "Rajshahi Collegiate School", year: "2000" },
                   { deg: "Primary & High School", inst: "Belkuri Govt. Primary School & High School", year: "Up to Class 7" }
                 ].map((item, i) => (
                   <div key={i} className="relative">
@@ -367,6 +369,94 @@ export default function App() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Organizational & Professional Role Section */}
+      <section id="organizational" className="py-24 bg-gradient-to-br from-blue-50 via-slate-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-4xl font-serif font-bold bg-gradient-to-r from-[#1a4a8d] to-[#d92c2c] bg-clip-text text-transparent mb-4">সাংগঠনিক ও পেশাগত ভূমিকা</h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-[#1a4a8d] to-[#d92c2c] mx-auto mb-6 rounded-full"></div>
+          </div>
+
+          {/* Organizational Positions */}
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-2xl border-2 border-[#1a4a8d] shadow-lg hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#1a4a8d] to-blue-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Briefcase className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900">প্রধান সমন্বয়ক</h3>
+                  <p className="text-[#1a4a8d] font-semibold mt-1">ঢাকাস্থ নওগাঁ-৩ সংগঠন</p>
+                </div>
+              </div>
+              <p className="text-slate-600 leading-relaxed">দায়িত্বশীল নেতৃত্বের মাধ্যমে সংগঠনের সম্প্রসারণ এবং শক্তিশালীকরণে গুরুত্বপূর্ণ ভূমিকা পালন।</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-2xl border-2 border-[#d92c2c] shadow-lg hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#d92c2c] to-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900">প্রতিষ্ঠাতা ও পরিচালক</h3>
+                  <p className="text-[#d92c2c] font-semibold mt-1">প্রকৃতি ও পরিবেশ বন্ধু সংগঠন</p>
+                </div>
+              </div>
+              <p className="text-slate-600 leading-relaxed">মহাদেবপুর, নওগাঁ অঞ্চলে পরিবেশ সচেতনতা ও সংরক্ষণ কাজে অগ্রগামী ভূমিকা।</p>
+            </motion.div>
+          </div>
+
+          {/* Environmental & Professional Contributions */}
+          <div className="grid lg:grid-cols-2 gap-12">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-[#1a4a8d]/10 to-blue-50 p-8 rounded-2xl border border-[#1a4a8d]/20">
+              <h3 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                <div className="w-2 h-8 bg-gradient-to-b from-[#1a4a8d] to-blue-500 rounded-full"></div>
+                সামাজিক ও পরিবেশগত ভূমিকা
+              </h3>
+              <p className="text-slate-700 leading-relaxed text-lg mb-4">
+                ইঞ্জিনিয়ার ফয়সাল হোসেন পরিবেশ ও প্রকৃতি রক্ষায় দীর্ঘদিন ধরে সচেতনতা কার্যক্রম পরিচালনা করে আসছেন। বিশেষভাবে তাল সাম্রাজ্যের গ্রাম কুড়াপাড়াকে কেন্দ্র করে তিনি সাধারণ মানুষের মাঝে পরিবেশ সচেতনতা সৃষ্টি করেন এবং তালগাছ সংরক্ষণ আন্দোলনে জনগণকে একত্রিত করতে গুরুত্বপূর্ণ ভূমিকা পালন করেন।
+              </p>
+              <p className="text-slate-700 leading-relaxed text-lg">
+                তাঁর নেতৃত্বে এলাকার মানুষ তালগাছ রক্ষায় ঐক্যবদ্ধ হয় এবং পরিবেশবান্ধব উদ্যোগে অংশগ্রহণ করতে উৎসাহিত হয়।
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-[#d92c2c]/10 to-red-50 p-8 rounded-2xl border border-[#d92c2c]/20">
+              <h3 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                <div className="w-2 h-8 bg-gradient-to-b from-[#d92c2c] to-red-500 rounded-full"></div>
+                পেশাগত দক্ষতা ও প্রশিক্ষণ কার্যক্রম
+              </h3>
+              <p className="text-slate-700 leading-relaxed text-lg mb-4">
+                তিনি বিভিন্ন শিল্প ও প্রতিষ্ঠানে দক্ষ মানবসম্পদ তৈরির লক্ষ্যে প্রশিক্ষণ প্রদান করে থাকেন। আধুনিক প্রযুক্তি, উৎপাদন ব্যবস্থাপনা, নেতৃত্ব উন্নয়ন এবং কর্মক্ষেত্রে দক্ষতা বৃদ্ধির বিষয়ে তাঁর বিশেষ অভিজ্ঞতা রয়েছে।
+              </p>
+              <p className="text-slate-700 leading-relaxed text-lg">
+                তিনি তরুণ প্রজন্মকে দক্ষ ও কর্মমুখী হিসেবে গড়ে তুলতে নিয়মিত কাজ করে যাচ্ছেন।
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
