@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Upload, X, Lock, LogOut, Loader, ArrowLeft } from 'lucide-react';
+import { Upload, X, Lock, LogOut, Loader, ArrowLeft, ImagePlus, Sparkles, FolderOpen } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,6 +19,9 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [bulkCaption, setBulkCaption] = useState('');
+  const [selectedBulkFiles, setSelectedBulkFiles] = useState<File[]>([]);
+  const [isBulkUploading, setIsBulkUploading] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState<{ [key: string]: boolean }>({});
   const [captionDrafts, setCaptionDrafts] = useState<string[]>([]);
   const [error, setError] = useState('');
@@ -38,6 +41,11 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
   useEffect(() => {
     setCaptionDrafts(currentGallery.map((item) => item.caption || ''));
   }, [currentGallery]);
+
+  const persistGallery = (items: GalleryItem[]) => {
+    onGalleryUpdate(items);
+    localStorage.setItem('faisal-gallery-items', JSON.stringify(items));
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +98,7 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
         uploadedAt: new Date().toISOString(),
       };
 
-      onGalleryUpdate(updatedGallery);
+      persistGallery(updatedGallery);
       setSuccess('ছবি আপডেট সফল!');
       setTimeout(() => setSuccess(''), 2000);
     } catch (err) {
@@ -101,6 +109,74 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
     }
   };
 
+  const handleBulkFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setSelectedBulkFiles(files);
+    setError('');
+  };
+
+  const handleBulkUpload = async () => {
+    if (!selectedBulkFiles.length) {
+      setError('কমপক্ষে একটি ছবি নির্বাচন করুন।');
+      return;
+    }
+
+    const caption = bulkCaption.trim();
+    if (!caption) {
+      setError('বাল্ক আপলোডের আগে ক্যাপশন লিখুন।');
+      return;
+    }
+
+    if (!cloudName) {
+      setError('Cloudinary cloud name সেট করা নেই। .env চেক করুন।');
+      return;
+    }
+
+    setIsBulkUploading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const uploadPromises = selectedBulkFiles.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'faisal_gallery');
+        formData.append('folder', 'faisal-gallery');
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        const responseText = await response.text();
+        const responseData = responseText ? JSON.parse(responseText) : {};
+
+        if (!response.ok) {
+          throw new Error(responseData?.error?.message || 'Upload failed');
+        }
+
+        return {
+          caption,
+          image: responseData.secure_url,
+          uploadedAt: new Date().toISOString(),
+        };
+      });
+
+      const uploadedItems = await Promise.all(uploadPromises);
+      persistGallery([...currentGallery, ...uploadedItems]);
+      setSuccess(`${selectedBulkFiles.length} টি ছবি সফলভাবে আপলোড হয়েছে!`);
+      setBulkCaption('');
+      setSelectedBulkFiles([]);
+      setTimeout(() => setSuccess(''), 2500);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      setError(`বাল্ক আপলোড ব্যর্থ: ${message}`);
+      console.error(err);
+    } finally {
+      setIsBulkUploading(false);
+    }
+  };
+
   const handleDeleteImage = (itemIndex: number) => {
     const updatedGallery = [...currentGallery];
     updatedGallery[itemIndex] = {
@@ -108,7 +184,7 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
       caption: captionDrafts[itemIndex] || updatedGallery[itemIndex].caption,
       image: 'https://images.unsplash.com/photo-1606857521220-98e5dba7214e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
     };
-    onGalleryUpdate(updatedGallery);
+    persistGallery(updatedGallery);
     setSuccess('ছবি মুছে ফেলা হয়েছে।');
     setTimeout(() => setSuccess(''), 2000);
   };
@@ -129,18 +205,23 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-gradient-to-r from-[#1a4a8d] to-[#d92c2c] shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-3">
-            <Lock className="w-8 h-8" />
-            <h1 className="text-3xl font-bold">গ্যালারি ম্যানেজমেন্ট সিস্টেম</h1>
+            <div className="rounded-2xl bg-[#1a4a8d] p-3 text-white shadow-sm">
+              <Lock className="w-7 h-7" />
+            </div>
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold text-slate-900">গ্যালারি ম্যানেজমেন্ট সিস্টেম</h1>
+              <p className="text-sm text-slate-600">Bulk event upload + caption-based gallery</p>
+            </div>
           </div>
           {isAuthenticated && (
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition font-semibold"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#d92c2c] px-5 py-2.5 font-semibold text-white transition hover:bg-[#b82626]"
             >
               <LogOut className="w-5 h-5" />
               লগআউট
@@ -158,13 +239,13 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
             animate={{ opacity: 1, scale: 1 }}
             className="max-w-md mx-auto"
           >
-            <div className="bg-slate-800 rounded-2xl shadow-2xl p-8 border border-slate-700">
+            <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
               <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#1a4a8d] to-[#d92c2c] rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-full bg-[#1a4a8d] flex items-center justify-center mx-auto mb-4 text-white shadow-sm">
                   <Lock className="w-8 h-8" />
                 </div>
-                <h2 className="text-3xl font-bold mb-2">অ্যাডমিন প্যানেল</h2>
-                <p className="text-slate-400">গ্যালারি ছবি আপডেট করতে লগইন করুন</p>
+                <h2 className="text-3xl font-bold mb-2 text-slate-900">অ্যাডমিন প্যানেল</h2>
+                <p className="text-slate-600">গ্যালারি ছবি আপডেট করতে লগইন করুন</p>
               </div>
 
               <form onSubmit={handleLogin} className="space-y-6">
@@ -177,7 +258,7 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="পাসওয়ার্ড এখানে দিন"
-                    className="w-full px-4 py-3 bg-slate-700 border-2 border-slate-600 rounded-lg text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 bg-white border-2 border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:border-[#1a4a8d] focus:outline-none transition"
                     required
                   />
                 </div>
@@ -186,7 +267,7 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-red-900 border-l-4 border-red-500 text-red-200 p-4 rounded"
+                    className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded"
                   >
                     {error}
                   </motion.div>
@@ -196,7 +277,7 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-green-900 border-l-4 border-green-500 text-green-200 p-4 rounded"
+                    className="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded"
                   >
                     {success}
                   </motion.div>
@@ -204,16 +285,16 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-[#1a4a8d] to-blue-700 hover:from-blue-700 hover:to-[#1a4a8d] text-white font-bold py-3 rounded-lg transition shadow-lg"
+                  className="w-full bg-[#1a4a8d] hover:bg-[#163a70] text-white font-bold py-3 rounded-lg transition shadow-sm"
                 >
                   লগইন করুন
                 </button>
               </form>
 
-              <div className="mt-6 pt-6 border-t border-slate-700">
+              <div className="mt-6 pt-6 border-t border-slate-200">
                 <button
                   onClick={() => navigate('/')}
-                  className="w-full flex items-center justify-center gap-2 text-slate-400 hover:text-white transition"
+                  className="w-full flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900 transition"
                 >
                   <ArrowLeft className="w-5 h-5" />
                   ওয়েবসাইটে ফিরে যান
@@ -226,27 +307,137 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-8"
+            className="space-y-8 pb-16"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-4xl font-bold mb-2">গ্যালারি আইটেম সম্পাদনা</h2>
-                <p className="text-slate-400">সকল গ্যালারি ছবি এখানে আপডেট করুন</p>
+            <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] items-stretch">
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur-xl">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                      <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-semibold text-[#1a4a8d]">
+                      <Sparkles className="w-4 h-4" />
+                      Bulk Event Upload
+                    </div>
+                      <h2 className="mt-4 text-4xl font-bold text-slate-900">একসাথে বহু ছবি আপলোড</h2>
+                      <p className="mt-2 max-w-2xl text-slate-600">
+                      একটি caption লিখে একাধিক event photo একসাথে Cloudinary-তে পাঠান। প্রতিটি ছবি একই caption নিয়ে gallery-তে যোগ হবে।
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => navigate('/')}
+                      className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    মূল পৃষ্ঠায় যান
+                  </button>
+                </div>
+
+                <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+                  <div className="rounded-2xl border border-dashed border-blue-200 bg-white p-6">
+                    <div className="flex items-center gap-3 text-[#1a4a8d] mb-4">
+                      <FolderOpen className="w-5 h-5" />
+                      <span className="font-semibold">Image Pack</span>
+                    </div>
+                    <label className="group flex min-h-45 cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition hover:border-[#1a4a8d] hover:bg-blue-50/60">
+                      <ImagePlus className="w-10 h-10 text-[#1a4a8d] transition group-hover:scale-110" />
+                      <span className="mt-4 text-lg font-semibold text-slate-900">একসাথে ছবি নির্বাচন করুন</span>
+                      <span className="mt-2 text-sm text-slate-500">Multiple files select করা যাবে</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleBulkFilesChange}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {selectedBulkFiles.length > 0 && (
+                      <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="mb-3 flex items-center justify-between text-sm text-slate-600">
+                          <span>Selected files</span>
+                          <button
+                            onClick={() => setSelectedBulkFiles([])}
+                            className="text-slate-500 transition hover:text-[#1a4a8d]"
+                          >
+                            Clear
+                          </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedBulkFiles.map((file) => (
+                            <span
+                              key={file.name}
+                              className="rounded-full bg-white px-3 py-1 text-xs text-slate-700 border border-slate-200"
+                            >
+                              {file.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200 bg-white p-6">
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">Caption</label>
+                    <textarea
+                      value={bulkCaption}
+                      onChange={(e) => setBulkCaption(e.target.value)}
+                      placeholder="এই event-এর caption লিখুন"
+                      rows={6}
+                      className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#1a4a8d] focus:outline-none"
+                    />
+
+                    <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm text-slate-700">
+                      একবারে একটি event-এর অনেক ছবি upload করুন। একই caption সব ছবিতে apply হবে।
+                    </div>
+
+                    <button
+                      onClick={handleBulkUpload}
+                      disabled={isBulkUploading}
+                      className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#1a4a8d] px-5 py-4 font-bold text-white shadow-sm transition hover:bg-[#163a70] disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isBulkUploading ? (
+                        <>
+                          <Loader className="w-5 h-5 animate-spin" />
+                          আপলোড হচ্ছে...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-5 h-5" />
+                          Bulk Upload Complete করুন
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
               </div>
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center gap-2 text-slate-300 hover:text-white transition"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                মূল পৃষ্ঠায় যান
-              </button>
+
+              <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-blue-50 p-3 text-[#1a4a8d]">
+                    <Lock className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">Admin Tips</h3>
+                    <p className="text-sm text-slate-500">Simple workflow</p>
+                  </div>
+                </div>
+
+                <ol className="mt-6 space-y-4 text-sm text-slate-700">
+                  <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">1. একটি event-এর জন্য caption লিখুন</li>
+                  <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">2. একাধিক ছবি select করুন</li>
+                  <li className="rounded-2xl border border-slate-200 bg-slate-50 p-4">3. upload দিলে প্রতিটি ছবি gallery-তে আলাদা card হিসেবে যোগ হবে</li>
+                </ol>
+
+                <div className="mt-6 rounded-2xl border border-yellow-100 bg-yellow-50 p-4 text-sm text-slate-700">
+                  বড় event-এর জন্য আলাদা caption ব্যবহার করুন, যেমন “ঈদ পুনর্মিলনী ২০২৬”, “গ্রামভিত্তিক সভা”, ইত্যাদি।
+                </div>
+              </div>
             </div>
 
             {error && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-red-900 border-l-4 border-red-500 text-red-200 p-4 rounded-lg"
+                className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg"
               >
                 {error}
               </motion.div>
@@ -256,84 +447,77 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-green-900 border-l-4 border-green-500 text-green-200 p-4 rounded-lg"
+                className="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg"
               >
                 {success}
               </motion.div>
             )}
 
-            <div className="grid gap-6">
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {currentGallery.map((item, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-slate-800 p-6 rounded-xl border-2 border-slate-700 hover:border-blue-500 transition"
+                  className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md transition hover:-translate-y-1 hover:border-blue-300"
                 >
-                  <div className="grid md:grid-cols-4 gap-6">
-                    {/* Image Preview */}
-                    <div className="col-span-1">
-                      <div className="aspect-square rounded-lg overflow-hidden bg-slate-700 border border-slate-600">
+                  <div className="space-y-4 p-4">
+                    <div className="aspect-4/3 overflow-hidden rounded-2xl bg-slate-100 border border-slate-200">
                         <img
                           src={item.image}
                           alt={item.caption}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition duration-500 hover:scale-105"
                         />
-                      </div>
                     </div>
 
-                    {/* Caption and Upload */}
-                    <div className="col-span-3 space-y-4">
-                      <div>
-                        <label className="text-sm font-semibold text-slate-400 mb-1 block">ক্যাপশন</label>
+                    <div>
+                      <label className="mb-2 block text-sm font-semibold text-slate-700">Caption</label>
+                      <input
+                        type="text"
+                        value={captionDrafts[index] || ''}
+                        onChange={(e) => handleCaptionChange(index, e.target.value)}
+                        placeholder="এই ছবির ক্যাপশন লিখুন"
+                        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1a4a8d]"
+                      />
+                    </div>
+
+                    <div className="flex gap-3">
+                      <label className="flex-1 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1a4a8d] px-4 py-3 font-semibold text-white transition hover:bg-[#163a70]">
+                        {uploadingFiles[index] ? (
+                          <>
+                            <Loader className="w-5 h-5 animate-spin" />
+                            আপলোড হচ্ছে...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-5 h-5" />
+                            Replace Image
+                          </>
+                        )}
                         <input
-                          type="text"
-                          value={captionDrafts[index] || ''}
-                          onChange={(e) => handleCaptionChange(index, e.target.value)}
-                          placeholder="এই ছবির ক্যাপশন লিখুন"
-                          className="w-full rounded-lg border border-slate-600 bg-slate-700 px-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, index)}
+                          disabled={uploadingFiles[index]}
+                          className="hidden"
                         />
-                      </div>
+                      </label>
 
-                      {/* Upload Section */}
-                      <div className="flex gap-3 pt-4">
-                        <label className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg cursor-pointer transition">
-                          {uploadingFiles[index] ? (
-                            <>
-                              <Loader className="w-5 h-5 animate-spin" />
-                              আপলোড হচ্ছে...
-                            </>
-                          ) : (
-                            <>
-                              <Upload className="w-5 h-5" />
-                              নতুন ছবি আপলোড করুন
-                            </>
-                          )}
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleImageUpload(e, index)}
-                            disabled={uploadingFiles[index]}
-                            className="hidden"
-                          />
-                        </label>
-
-                        <button
-                          onClick={() => handleDeleteImage(index)}
-                          className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center gap-2"
-                        >
-                          <X className="w-5 h-5" />
-                          মুছুন
-                        </button>
-                      </div>
-
-                      {item.uploadedAt && (
-                        <p className="text-xs text-slate-500 pt-2">
-                          আপলোড: {new Date(item.uploadedAt).toLocaleDateString('bn-BD')}
-                        </p>
-                      )}
+                      <button
+                        onClick={() => handleDeleteImage(index)}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#d92c2c] px-4 py-3 font-semibold text-white transition hover:bg-[#b82626]"
+                      >
+                        <X className="w-5 h-5" />
+                        মুছুন
+                      </button>
                     </div>
+
+                    {item.uploadedAt && (
+                      <p className="text-xs text-slate-500">
+                        আপলোড: {new Date(item.uploadedAt).toLocaleDateString('bn-BD')}
+                      </p>
+                    )}
                   </div>
                 </motion.div>
               ))}
