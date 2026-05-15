@@ -549,9 +549,9 @@ export default function HomePage({ galleryItems, onGalleryUpdate }: HomePageProp
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-linear-to-br from-[#d92c2c] to-red-600 rounded-lg flex items-center justify-center">
+              {/* <div className="w-8 h-8 bg-linear-to-br from-[#d92c2c] to-red-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">ফ</span>
-              </div>
+              </div> */}
               <span className="text-2xl font-bold text-white tracking-tight font-bengali italic">ফয়সাল হোসেন</span>
             </div>
             <div className="flex space-x-6 items-center">
@@ -560,13 +560,13 @@ export default function HomePage({ galleryItems, onGalleryUpdate }: HomePageProp
               <a href="#" className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600/30 transition-all duration-300 transform hover:scale-110"><Linkedin className="w-5 h-5" /></a>
               
               {/* Admin Button - Opens /admin route instead */}
-              <button
+              {/* <button
                 onClick={() => navigate('/admin')}
                 className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-110 ml-2"
                 title="গ্যালারি ম্যানেজমেন্ট"
               >
                 <Settings className="w-5 h-5" />
-              </button>
+              </button> */}
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-slate-800 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
