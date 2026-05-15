@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Upload, X, Lock, LogOut, Loader, ArrowLeft, ImagePlus, Sparkles, FolderOpen } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
+import { addGalleryItems, saveGalleryItems, updateGalleryItem } from './api/gallery';
 
 interface GalleryItem {
   id?: string;
@@ -26,6 +27,7 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
   const [captionDrafts, setCaptionDrafts] = useState<string[]>([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [hasLocalItems, setHasLocalItems] = useState(false);
 
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const correctPassword = import.meta.env.VITE_ADMIN_PASSWORD;
@@ -42,9 +44,58 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
     setCaptionDrafts(currentGallery.map((item) => item.caption || ''));
   }, [currentGallery]);
 
-  const persistGallery = (items: GalleryItem[]) => {
-    onGalleryUpdate(items);
-    localStorage.setItem('faisal-gallery-items', JSON.stringify(items));
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('faisal-gallery-items');
+      const arr = raw ? JSON.parse(raw) : [];
+      setHasLocalItems(Array.isArray(arr) && arr.length > 0);
+    } catch {
+      setHasLocalItems(false);
+    }
+  }, []);
+
+  const handleMigrateLocalToFirebase = async () => {
+    setError('');
+    setSuccess('');
+    try {
+      const raw = localStorage.getItem('faisal-gallery-items');
+      const arr = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(arr) || arr.length === 0) {
+        setError('LocalStorage-এ কোনো আইটেম নেই।');
+        return;
+      }
+
+      // Normalize items for export
+      const toUpload = arr.map((it: any) => ({
+        caption: it.caption || '',
+        image: it.image || '',
+        uploadedAt: it.uploadedAt || new Date().toISOString(),
+      }));
+
+      const saved = await addGalleryItems(toUpload);
+      // Clear localStorage and update UI
+      localStorage.removeItem('faisal-gallery-items');
+      setHasLocalItems(false);
+      onGalleryUpdate([...currentGallery, ...saved]);
+      setSuccess(`মাইগ্রেশন সফল: ${saved.length} টি আইটেম Firestore-এ যুক্ত হয়েছে।`);
+      setTimeout(() => setSuccess(''), 4000);
+    } catch (err) {
+      console.error('Migration failed:', err);
+      setError('Migration ব্যর্থ হয়েছে — কনসোল দেখুন।');
+    }
+  };
+
+  const persistGallery = async (items: GalleryItem[]) => {
+    try {
+      const saved = await saveGalleryItems(items);
+      onGalleryUpdate(saved);
+    } catch (err) {
+      console.error('Failed to save gallery:', err);
+      // Fallback to localStorage
+      onGalleryUpdate(items);
+      localStorage.setItem('faisal-gallery-items', JSON.stringify(items));
+      setError('সেভ ব্যর্থ — localStorage-এ সেভ করা হয়েছে। API/Firestore কনফিগ চেক করুন।');
+    }
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -65,10 +116,14 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, itemIndex: number) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const caption = (captionDrafts[itemIndex] || '').trim();
     if (!caption) {
       setError('ছবি আপলোডের আগে ক্যাপশন লিখুন।');
+      return;
+    }
+
+    if (!cloudName) {
+      setError('Cloudinary cloud name সেট করা নেই। .env চেক করুন।');
       return;
     }
 
@@ -87,9 +142,13 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Upload failed');
+      const responseText = await response.text();
+      const data = responseText ? JSON.parse(responseText) : {};
 
-      const data = await response.json();
+      if (!response.ok) {
+        const cloudinaryMessage = data?.error?.message || 'Upload failed';
+        throw new Error(cloudinaryMessage);
+      }
       const updatedGallery = [...currentGallery];
       updatedGallery[itemIndex] = {
         ...updatedGallery[itemIndex],
@@ -98,7 +157,12 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
         uploadedAt: new Date().toISOString(),
       };
 
-      persistGallery(updatedGallery);
+      if (updatedGallery[itemIndex].id) {
+        await updateGalleryItem(updatedGallery[itemIndex].id as string, updatedGallery[itemIndex]);
+        onGalleryUpdate(updatedGallery);
+      } else {
+        await persistGallery(updatedGallery);
+      }
       setSuccess('ছবি আপডেট সফল!');
       setTimeout(() => setSuccess(''), 2000);
     } catch (err) {
@@ -163,7 +227,9 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
       });
 
       const uploadedItems = await Promise.all(uploadPromises);
-      persistGallery([...currentGallery, ...uploadedItems]);
+      const savedItems = await addGalleryItems(uploadedItems);
+      onGalleryUpdate([...currentGallery, ...savedItems]);
+
       setSuccess(`${selectedBulkFiles.length} টি ছবি সফলভাবে আপলোড হয়েছে!`);
       setBulkCaption('');
       setSelectedBulkFiles([]);
@@ -177,14 +243,19 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
     }
   };
 
-  const handleDeleteImage = (itemIndex: number) => {
+  const handleDeleteImage = async (itemIndex: number) => {
     const updatedGallery = [...currentGallery];
     updatedGallery[itemIndex] = {
       ...updatedGallery[itemIndex],
       caption: captionDrafts[itemIndex] || updatedGallery[itemIndex].caption,
       image: 'https://images.unsplash.com/photo-1606857521220-98e5dba7214e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
     };
-    persistGallery(updatedGallery);
+    if (updatedGallery[itemIndex].id) {
+      await updateGalleryItem(updatedGallery[itemIndex].id as string, updatedGallery[itemIndex]);
+      onGalleryUpdate(updatedGallery);
+    } else {
+      await persistGallery(updatedGallery);
+    }
     setSuccess('ছবি মুছে ফেলা হয়েছে।');
     setTimeout(() => setSuccess(''), 2000);
   };
@@ -432,6 +503,21 @@ export default function AdminPage({ onGalleryUpdate, currentGallery }: AdminPage
                 </div>
               </div>
             </div>
+              {hasLocalItems && (
+                <div className="mt-4 flex items-center justify-between gap-4">
+                  <div className="flex-1 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-emerald-900 text-sm">
+                    LocalStorage-এ পুরোনো gallery আইটেম আছে — এগুলো Firestore-এ মাইগ্রেট করতে পারেন।
+                  </div>
+                  <div>
+                    <button
+                      onClick={handleMigrateLocalToFirebase}
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-white font-semibold hover:bg-emerald-700 transition"
+                    >
+                      মাইগ্রেট করে Firebase-এ পাঠান
+                    </button>
+                  </div>
+                </div>
+              )}
 
             {error && (
               <motion.div

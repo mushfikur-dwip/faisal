@@ -4,18 +4,23 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev:web": "vite --port=3000 --host=0.0.0.0",
+    "dev:api": "PORT=5050 tsx api/server.ts",
+    "dev": "sh -c 'pnpm run dev:api & pnpm run dev:web'",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "migrate:firestore": "node ./scripts/migrateLocalToFirestore.cjs"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "firebase": "^12.13.0",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "react": "^19.0.1",
@@ -29,6 +34,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.21",
+    "firebase-admin": "^13.10.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
