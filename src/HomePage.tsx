@@ -190,7 +190,8 @@ export default function HomePage({ galleryItems, onGalleryUpdate }: HomePageProp
                   { deg: "B.Sc in Textile Engineering", inst: "Bangladesh Textile University (BUTEX), Dhaka", year: "Graduation" },
                   { deg: "HSC (Science)", inst: "Rajshahi New Govt. Degree College", year: "2002" },
                   { deg: "SSC (Science)", inst: "Rajshahi Collegiate School", year: "2000" },
-                  { deg: "Primary & High School", inst: "Belkuri Govt. Primary School & High School", year: "Up to Class 7" }
+                  { deg: "High School", inst: "Belkuri High School", year: "Up to Class 7" },
+                  { deg: "Primary School", inst: "Belkuri Govt. Primary School" }
                 ].map((item, i) => (
                   <div key={i} className="relative">
                     <span className="absolute -left-10 mt-1.5 w-4 h-4 bg-white border-2 border-[#1a4a8d] rounded-full"></span>
@@ -249,7 +250,7 @@ export default function HomePage({ galleryItems, onGalleryUpdate }: HomePageProp
               className="bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">ছাত্র রাজনীতি</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                বিশ্ববিদ্যালয় জীবনে ছাত্রদলের রাজনীতির সাথে সম্পৃক্ত। ঢাকাস্থ নওগাঁ জেলার ছাত্রদের নিয়ে ছাত্র কল্যাণ সমিতি গঠন এবং বুটেক্সিয়ান ছাত্র সংগঠনকে একত্রিত করায় অপরিসীম ভূমিকা। মহাদেবপুর উপজেলা আঞ্চলিক ছাত্র কল্যাণ সমিতির প্রতিষ্ঠাতা সভাপতি।
+                বিশ্ববিদ্যালয় জীবনে ছাত্রদলের রাজনীতির সাথে সম্পৃক্ত। ঢাকাস্থ নওগাঁ জেলার ছাত্রদের নিয়ে ছাত্র কল্যাণ সমিতি গঠন এবং বুটেক্সিয়ান ঢাকাস্থ নওগাঁ ছাত্র সংগঠন কে একত্রিত করার অপরিসীম ভূমিকা। মহাদেবপুর উপজেলা আঞ্চলিক ছাত্র কল্যাণ সমিতির প্রতিষ্ঠাতা সভাপতি।
               </p>
             </motion.div>
             
@@ -273,7 +274,7 @@ export default function HomePage({ galleryItems, onGalleryUpdate }: HomePageProp
               className="bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-purple-400/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">পেশাজীবী রাজনীতি</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                নওগাঁ জেলা খালেদা জিয়া তারেক রহমান মুক্তি পরিষদ-এর সহ-সভাপতি (২০১১)। জাতীয়তাবাদী টেক্সটাইল ইঞ্জিনিয়ার ফোরামের যুগ্ন সাধারণ সম্পাদক। এ্যাব (AEB) এরাজীপুর জেলা নির্বাচনী কমিটির যুগ্ন আহ্বায়ক এবং নওগাঁ জেলা কমিটির সদস্য (২০২৬)।
+                নওগাঁ জেলা খালেদা জিয়া তারেক রহমান মুক্তি পরিষদ-এর সহ-সভাপতি (২০১১)। জাতীয়তাবাদী টেক্সটাইল ইঞ্জিনিয়ার ফোরামের যুগ্ম সাংগঠনিক সম্পাদক এইবি (AEB) এর গাজীপুর জেলা নির্বাচনী কমিটির যুগ্ন আহ্বায়ক এবং নওগাঁ জেলা কমিটির সদস্য (২০২৬)।
               </p>
             </motion.div>
           </div>
