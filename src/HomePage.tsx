@@ -241,25 +241,40 @@ export default function HomePage({ galleryItems, onGalleryUpdate }: HomePageProp
             <p className="text-slate-300 text-lg">ছাত্রজীবন থেকে শুরু করে জাতীয় পর্যায় পর্যন্ত বলিষ্ঠ রাজনৈতিক নেতৃত্ব ও সাংগঠনিক দক্ষতা।</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-8">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
-              className="bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:scale-105">
+              className="lg:col-span-2 bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">ছাত্র রাজনীতি</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
                 বিশ্ববিদ্যালয় জীবনে ছাত্রদলের রাজনীতির সাথে সম্পৃক্ত। ঢাকাস্থ নওগাঁ জেলার ছাত্রদের নিয়ে ছাত্র কল্যাণ সমিতি গঠন এবং বুটেক্সিয়ান ঢাকাস্থ নওগাঁ ছাত্র সংগঠন কে একত্রিত করার অপরিসীম ভূমিকা। মহাদেবপুর উপজেলা আঞ্চলিক ছাত্র কল্যাণ সমিতির প্রতিষ্ঠাতা সভাপতি।
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="lg:col-span-2 bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-cyan-400/50 hover:shadow-xl hover:shadow-cyan-500/20 transition-all duration-300 transform hover:scale-105">
+              <h3 className="text-xl font-bold text-[#64b5f6] mb-3">কেন্দ্রীয় রাজনৈতিক ও সাংগঠনিক দায়িত্ব</h3>
+              <p className="text-cyan-200 font-semibold text-sm leading-relaxed mb-4">
+                জাতীয়তাবাদী জিয়া সৈনিক দল — বিজ্ঞান ও প্রযুক্তি বিষয়ক সম্পাদক, কেন্দ্রীয় কমিটি
+              </p>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                জাতীয়তাবাদী জিয়া সৈনিক দলের কেন্দ্রীয় কমিটিতে বিজ্ঞান ও প্রযুক্তি বিষয়ক সম্পাদক হিসেবে দায়িত্ব পালন করছি। বিজ্ঞান, প্রযুক্তি ও ডিজিটাল সচেতনতামূলক কার্যক্রমে সংগঠনকে সহায়তা করছি।
               </p>
             </motion.div>
             
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
-              className="bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-red-400/50 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300 transform hover:scale-105">
+              className="lg:col-span-2 bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-red-400/50 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">জাতীয় নির্বাচন ভূমিকা</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
                 ২০০৮ ও ২০২৬ সালের জাতীয় সংসদে সরাসরি নির্বাচনী প্রচারণা। ২০২৬ সালে নওগাঁ-৩ আসনে ফজলে হুদা বাবুল এর সাথে যুক্ত থেকে ওয়ার্ড ও ইউনিয়ন পর্যায়ে শক্তিশালী নির্বাচনী কাঠামো গড়ে বিজয়ী করতে অসামান্য ভূমিকা।
@@ -269,12 +284,27 @@ export default function HomePage({ galleryItems, onGalleryUpdate }: HomePageProp
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
-              className="bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-purple-400/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:scale-105">
+              className="lg:col-span-3 bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-purple-400/50 hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 transform hover:scale-105">
               <h3 className="text-xl font-bold text-[#64b5f6] mb-4">পেশাজীবী রাজনীতি</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
                 নওগাঁ জেলা খালেদা জিয়া তারেক রহমান মুক্তি পরিষদ-এর সহ-সভাপতি (২০১১)। জাতীয়তাবাদী টেক্সটাইল ইঞ্জিনিয়ার ফোরামের যুগ্ম সাংগঠনিক সম্পাদক এইবি (AEB) এর গাজীপুর জেলা নির্বাচনী কমিটির যুগ্ন আহ্বায়ক এবং নওগাঁ জেলা কমিটির সদস্য (২০২৬)।
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="lg:col-span-3 bg-linear-to-br from-[#2a3649] to-[#1a2639] p-8 rounded-2xl border border-white/10 hover:border-amber-400/50 hover:shadow-xl hover:shadow-amber-500/20 transition-all duration-300 transform hover:scale-105">
+              <h3 className="text-xl font-bold text-[#64b5f6] mb-3">পেশাজীবী ও সাংগঠনিক দায়িত্ব</h3>
+              <p className="text-amber-200 font-semibold text-sm leading-relaxed mb-4">
+                আইটিইটি — শিক্ষা ও সাহিত্য বিষয়ক সম্পাদক
+              </p>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                বর্তমানে আইটিইটির শিক্ষা ও সাহিত্য বিষয়ক সম্পাদক হিসেবে দায়িত্ব পালন করছি। শিক্ষা, সাহিত্য ও পেশাজীবী সদস্যদের দক্ষতা উন্নয়নসংক্রান্ত কার্যক্রমে সম্পৃক্ত আছি।
               </p>
             </motion.div>
           </div>
