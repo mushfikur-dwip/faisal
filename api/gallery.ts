@@ -18,12 +18,19 @@ function getFirestoreDb(): Firestore {
   }
 
   if (getApps().length === 0) {
+    const localServiceAccountPath = path.join(process.cwd(), 'serviceAccountKey.json');
+    const useLocalServiceAccount =
+      process.env.NODE_ENV !== 'production' && fs.existsSync(localServiceAccountPath);
     const serviceAccountCandidates = [
       process.env.GOOGLE_APPLICATION_CREDENTIALS,
-      path.join(process.cwd(), 'serviceAccountKey.json'),
+      localServiceAccountPath,
     ].filter(Boolean) as string[];
 
-    const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+    // During local development, prefer the downloaded key file. This avoids a stale
+    // production-style env value silently overriding a freshly rotated local key.
+    const serviceAccountJson = useLocalServiceAccount
+      ? undefined
+      : process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
     const serviceAccountPath = serviceAccountCandidates.find((candidate) => fs.existsSync(candidate));
     if (!serviceAccountJson && !serviceAccountPath) {
       throw new Error('Missing Firebase service account JSON. Set FIREBASE_SERVICE_ACCOUNT_KEY, place serviceAccountKey.json in the project root, or set GOOGLE_APPLICATION_CREDENTIALS.');
